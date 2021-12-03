@@ -1,0 +1,3 @@
+[submodule "microservices-spring-cloud-config"]
+	path = microservices-spring-cloud-config
+	url = https://github.com/carldevoos/microservices-spring-cloud-config
