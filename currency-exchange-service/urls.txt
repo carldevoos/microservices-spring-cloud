@@ -17,3 +17,8 @@ API Gateway - lower
 http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/PEN
 http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/PEN/quantity/10
 http://localhost:8765/currency-conversion/currency-conversion-feign/from/USD/to/PEN/quantity/10
+
+http://localhost:8765/currency-exchange/from/USD/to/PEN
+http://localhost:8765/currency-conversion/from/USD/to/PEN/quantity/10
+http://localhost:8765/currency-conversion-feign/from/USD/to/PEN/quantity/10
+http://localhost:8765/currency-conversion-new/from/USD/to/PEN/quantity/10
