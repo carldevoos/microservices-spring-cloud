@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.0</spring-cloud.version>
+		<hub.id>carldevoos</hub.id>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -76,6 +77,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${hub.id}/${project.artifactId}:${project.version}</name>
+					</image>
+					<!--Hace un pull solo si no estan en local-->
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
