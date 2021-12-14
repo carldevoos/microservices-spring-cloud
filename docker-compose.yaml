@@ -8,6 +8,28 @@ services:
     networks:
       - currency-network
 
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    mem_limit: 300m
+    networks:
+      - currency-network
+
+  zipkin-server:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    mem_limit: 300m
+    networks:
+      - currency-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBIT_URI=amqp://guest:guest@rabbitmq:5672
+    restart: always
+
   currency-exchange:
     image: carldevoos/currency-exchange-service:0.0.1-SNAPSHOT
     ports:
@@ -17,8 +39,13 @@ services:
       - currency-network
     depends_on:
       - naming-server
+      - rabbitmq
     environment:
       - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka
+      - SPRING.ZIPKIN.BASEURL=http://zipkin-server:9411/
+      - RABBIT_URI=amqp://guest:guest@rabbitmq:5672
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_ZIPKIN_SENDER_TYPE=rabbit
   
   currency-conversion:
     image: carldevoos/currency-conversion-service:0.0.1-SNAPSHOT
@@ -29,8 +56,30 @@ services:
       - currency-network
     depends_on:
       - naming-server
+      - rabbitmq
     environment:
       - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka
+      - SPRING.ZIPKIN.BASEURL=http://zipkin-server:9411/
+      - RABBIT_URI=amqp://guest:guest@rabbitmq:5672
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_ZIPKIN_SENDER_TYPE=rabbit
+
+  api-gateway:
+    image: carldevoos/api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - "8765:8765"
+    mem_limit: 700m
+    networks:
+      - currency-network
+    depends_on:
+      - naming-server
+      - rabbitmq
+    environment:
+      - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka
+      - SPRING.ZIPKIN.BASEURL=http://zipkin-server:9411/
+      - RABBIT_URI=amqp://guest:guest@rabbitmq:5672
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_ZIPKIN_SENDER_TYPE=rabbit
 
 networks:
   currency-network:
