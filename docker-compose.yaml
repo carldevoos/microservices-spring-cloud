@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  naming-server:
+    image: carldevoos/naming-server:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761"
+    mem_limit: 700m
+    networks:
+      - currency-network
+  currency-exchange:
+    image: carldevoos/currency-exchange-service:0.0.1-SNAPSHOT
+    ports:
+      - "8000:8000"
+    mem_limit: 700m
+    networks:
+      - currency-network
+    depends_on:
+      - naming-server
+    environment:
+      - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka
+
+
+networks:
+  currency-network:
