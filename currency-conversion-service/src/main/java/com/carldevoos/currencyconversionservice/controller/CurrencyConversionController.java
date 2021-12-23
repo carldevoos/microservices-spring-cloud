@@ -2,6 +2,8 @@ package com.carldevoos.currencyconversionservice.controller;
 
 import com.carldevoos.currencyconversionservice.models.CurrencyConversion;
 import com.carldevoos.currencyconversionservice.proxys.CurrencyExchangeProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,15 @@ public class CurrencyConversionController {
     @Autowired
     CurrencyExchangeProxy currencyExchangeProxy;
 
+    private Logger logger = LoggerFactory.getLogger(CurrencyConversionController.class);
+
     @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversion(
             @PathVariable String from,
             @PathVariable String to,
             @PathVariable BigDecimal quantity) {
+
+        logger.info("calculateCurrencyConversion, from {} to {}", from, to);
 
         HashMap<String, String> uriVariables = new HashMap<>();
         uriVariables.put("from", from);
@@ -47,6 +53,8 @@ public class CurrencyConversionController {
             @PathVariable String from,
             @PathVariable String to,
             @PathVariable BigDecimal quantity) {
+
+        logger.info("calculateCurrencyConversionFeign, from {} to {}", from, to);
 
         CurrencyConversion currencyConversion = currencyExchangeProxy.retrieverExchangeValue(from, to);
 
