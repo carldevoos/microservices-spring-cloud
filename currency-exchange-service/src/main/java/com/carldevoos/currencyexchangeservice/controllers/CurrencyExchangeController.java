@@ -19,7 +19,7 @@ public class CurrencyExchangeController {
     @Autowired
     private CurrencyExchangeRepository currencyExchangeRepository;
 
-    private Logger logger = LoggerFactory.getLogger(CurrencyExchangeController.class);
+    private final Logger logger = LoggerFactory.getLogger(CurrencyExchangeController.class);
 
     @GetMapping("/currency-exchange/from/{from}/to/{to}")
     public CurrencyExchange retrieverExchangeValue(
